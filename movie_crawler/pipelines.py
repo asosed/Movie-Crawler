@@ -49,13 +49,22 @@ class MoviePipeline:
             if adapter.get(key) and isinstance(adapter[key], list):
                 adapter[key] = [value.strip() for value in adapter[key] if value != '|']
 
-        # Data types integer
-        for key in ['budget','gross_usa','opening_weekend_usa','cumulative_gross','year_release','rating_count']:
+        # Money data types
+        for key in ['budget','gross_usa','opening_weekend_usa','cumulative_gross']:
             if adapter.get(key) and re.match('\$[0-9]', adapter[key]):
                 adapter[key] = int( adapter[key].strip('$').replace(',', '') ) 
+        
+        # Integer data types
+        for key in ['rating_count']:
+            if adapter.get(key) and adapter[key].replace(',', '').isdigit():
+                adapter[key] = int(adapter[key].replace(',', ''))
 
-        # Data types float
+        # Float data types
         if adapter.get('rating'):
             adapter['rating'] = float(adapter['rating'])
+
+        # Transform summary
+        if adapter.get('summary'):
+            adapter['summary'] = ' '.join([s.strip() for s in adapter['summary']])
         
         return item

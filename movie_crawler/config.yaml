@@ -23,9 +23,10 @@ movie_sites:
       rating: '//span[@itemprop="ratingValue"]/descendant::text()'
       rating_count: '//span[@itemprop="ratingCount"]/descendant::text()'
       director: '//div[contains(@class, "plot_summary")]//*[contains(text(), "Director")]/following::*/text()'
-      writers: '//*[child::*[contains(text(), "Writers")]]/a/text()'
+      writers: '//*[contains(text(), "Writer")]/following-sibling::a/text()'
       stars: '//div[child::*[contains(text(), "Stars")]]/a[(following-sibling::span)]/text()'
-      summary: '//div[@class="summary_text"]/text()'
+      # summary: '//div[@class="summary_text"]/text()'
+      summary: '//div[@class="summary_text"]/descendant::text()'
       cast: '//table[@class="cast_list"]//a[contains(@href, "name")]/text()'
       storyline: //div[@id="titleStoryLine"]//p/span/text()
       poster: '//*[parent::div[@class="poster"]]/@href'
