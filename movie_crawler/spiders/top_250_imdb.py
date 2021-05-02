@@ -25,14 +25,14 @@ class ImdbSpider(scrapy.Spider):
         item = MovieItem()
         item['url'] = response.url
 
-        # Queries that returns only one value
+        # Requests that return only one value
         returns_unique = ['title','rating','year_release','duration','release_date','rating_count',
-                          'summary','director','storyline','certificate','aka','country','language',
-                          'filming_locations','budget','gross_usa','opening_weekend_usa','color',
-                          'sound_mix','aspect_ratio', 'cumulative_gross', 'poster']
+                          'director','storyline','certificate','aka','country','language','filming_locations',
+                          'budget','gross_usa','opening_weekend_usa','color','sound_mix','aspect_ratio',
+                          'cumulative_gross','poster']
 
-        # Queries that returns a list
-        returns_list   = ['writers','stars','genres','keywords','cast']
+        # Requests that return a list
+        returns_list   = ['writers','stars','genres','keywords','cast', 'summary']
 
         for key in returns_unique:
             item[key] = response.xpath(xpaths[key]).get()
