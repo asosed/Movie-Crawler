@@ -26,9 +26,9 @@ class ImdbSpider(scrapy.Spider):
         item['url'] = response.url
 
         # Requests that return only one value
-        returns_unique = ['title','rating','year_release','duration','release_date','rating_count',
-                          'director','storyline','certificate','aka','country','language','filming_locations',
-                          'budget','gross_usa','opening_weekend_usa','color','sound_mix','aspect_ratio',
+        returns_unique = ['title','rating','duration','release_date','rating_count','filming_locations',
+                          'director','storyline','certificate','aka','country','language','aspect_ratio',
+                          'budget','gross_usa','opening_weekend_usa','color','sound_mix',
                           'cumulative_gross','poster']
 
         # Requests that return a list

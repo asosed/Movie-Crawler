@@ -47,24 +47,29 @@ class MoviePipeline:
                 adapter[key] = adapter[key].strip()
 
             if adapter.get(key) and isinstance(adapter[key], list):
-                adapter[key] = [value.strip() for value in adapter[key] if value != '|']
+                adapter[key] = list(set([value.strip() for value in adapter[key] if value != '|']))
 
-        # Money data types
-        for key in ['budget','gross_usa','opening_weekend_usa','cumulative_gross']:
-            if adapter.get(key) and re.match('\$[0-9]', adapter[key]):
-                adapter[key] = int( adapter[key].strip('$').replace(',', '') ) 
+        # # Money data types
+        # for key in ['budget','opening_weekend_usa','cumulative_gross']:
+        #     if adapter.get(key) and re.match('\d+', adapter[key]):
+        #         extract = re.search('\d+([,][\d]+)?([,][\d]+)?').group(0)
+        #         adapter[key] = int( adapter[key].replace(',', '') ) 
         
         # Integer data types
-        for key in ['rating_count']:
-            if adapter.get(key) and adapter[key].replace(',', '').isdigit():
-                adapter[key] = int(adapter[key].replace(',', ''))
+        for key in ['rating_count','opening_weekend_usa','cumulative_gross','budget']:
+            if adapter.get(key) and re.search('\d+', adapter[key]):
+                extract = re.search('\d+([,][\d]+)?([,][\d]+)?', adapter[key]).group(0)
+                adapter[key] = int(extract.replace(',', ''))
 
         # Float data types
-        if adapter.get('rating'):
-            adapter['rating'] = float(adapter['rating'])
+        for key in ['rating', 'gross_usa']:
+            if adapter.get(key) and re.search('\d+', adapter[key]):
+                extract = re.search('\d+(,\d{3})*(\.\d*)?', adapter[key]).group(0)
+                adapter[key] = float(extract.replace(',',''))
 
-        # Transform summary
-        if adapter.get('summary'):
-            adapter['summary'] = ' '.join([s.strip() for s in adapter['summary']])
+        # Clean genres
+        if adapter.get('genres') and not isinstance(adapter['genres'], list):
+            adapter['genres'] = [re.sub('\n','',s).strip() for s in adapter['genres'].split(',')]
         
+
         return item

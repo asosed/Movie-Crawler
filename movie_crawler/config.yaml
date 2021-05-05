@@ -30,3 +30,21 @@ movie_sites:
       cast: '//table[@class="cast_list"]//a[contains(@href, "name")]/text()'
       storyline: //div[@id="titleStoryLine"]//p/span/text()
       poster: '//*[parent::div[@class="poster"]]/@href'
+
+  rotten:
+    xpaths:
+      title: '//*[@class="scoreboard__title"]/text()'
+      duration: '//*[contains(text(),"Runtime")]/following-sibling::*/*/text()'
+      director: '//*[contains(text(),"Director")]/following-sibling::*/*/text()'
+      writers: '//*[contains(text(),"Writer")]/following-sibling::*/*/text()' #list
+      genres: '//div[contains(@class,"genre")]/text()'
+      sound_mix: '//*[contains(text(),"Sound")]/following-sibling::*/text()'
+      aspect_ratio: '//*[contains(text(),"Ratio")]/following-sibling::*/text()'
+      cast: '//section[contains(@id,"cast")]//span/@title' #set(list)
+      gross_usa: '//*[contains(text(),"Gross")]/following-sibling::*/text()'
+      release_date: '//*[contains(text(),"Release")]/following-sibling::*/*/text()'
+      rating: '//*[contains(@data-qa, "score")]/@audiencescore'
+      rating_count: '//*[contains(@slot, "audience-count")]/text()'
+      summary: '//*[@id="movieSynopsis"]/text()'
+      poster: '//*[contains(@class, "posterImage")]/@data-src'
+      
