@@ -2,10 +2,12 @@ import scrapy
 
 from movie_crawler.items import MovieItem
 from movie_crawler.common import config
-xpaths = config()['movie_sites']['imdb']['xpaths']
+
 
 
 class ImdbSpider(scrapy.Spider):
+    xpaths = config()['movie_sites']['imdb']['xpaths']
+    
     name = 'top_250_imdb'
     start_urls = ['http://www.imdb.com/chart/top/']
     
@@ -16,7 +18,7 @@ class ImdbSpider(scrapy.Spider):
         sa their callback function
         """
         # Links to the movie pages
-        movies =  response.xpath('//tbody[@class="lister-list"]//td[@class="titleColumn"]/a/@href').getall()
+        movies =  response.xpath('//tbody[@class="lister-list"]//td[@class="titleColumn"]/a/@href').getall()[:1]
         for movie in movies:
             yield response.follow(movie, callback=self.parse_movie)            
 
@@ -35,10 +37,24 @@ class ImdbSpider(scrapy.Spider):
         returns_list   = ['writers','stars','genres','keywords','cast', 'summary']
 
         for key in returns_unique:
-            item[key] = response.xpath(xpaths[key]).get()
+            item[key] = response.xpath(self.xpaths[key]).get()
 
         for key in returns_list:
-            item[key] = response.xpath(xpaths[key]).getall()
+            item[key] = response.xpath(self.xpaths[key]).getall()
+
+        
+        link_to_reviews = response.xpath(self.xpaths['link_to_reviews']).get()
+        yield response.follow(link_to_reviews, callback=self.parse_reviews, cb_kwargs=dict(item=item))
+
+    
+    def parse_reviews(self, response, item):
+        item['reviews'] = []
+
+        reviews = response.xpath(self.xpaths['reviews'])
+        for review in reviews:
+            item['reviews'].append(' '.join(review.xpath('text()').getall()))
+
+        yield item 
 
 
-        yield item
+        

@@ -37,3 +37,4 @@ class MovieItem(scrapy.Item):
     summary = scrapy.Field()
     cast = scrapy.Field()
     poster = scrapy.Field()
+    reviews = scrapy.Field()
